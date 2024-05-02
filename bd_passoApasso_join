@@ -1,0 +1,48 @@
+PASSAO A PASSO PARA FAZER A TAREFA DE CRIAÇÃO DO BANCO DE DADOS E SELECT UTILIZANDO O JOIN
+
+
+--CRIAR O BANCO
+CREATE DATABASE VENDA;
+
+--CRIA A TABELA CLIENTES
+CREATE TABLE clientes (
+    cliente_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome VARCHAR(100),
+    email VARCHAR(100)
+);
+
+
+--CRIA A TABELA PEDIDOS
+CREATE TABLE pedidos (
+    pedido_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    cliente_id INT,
+    produto VARCHAR(100),
+    quantidade INT,
+    FOREIGN KEY (cliente_id) REFERENCES clientes(cliente_id)
+);
+
+
+--INSERI DADOS EM CLIENTES
+INSERT INTO clientes (nome, email) VALUES
+('João', 'joao@example.com'),
+('Maria', 'maria@example.com'),
+('Pedro', 'pedro@example.com');
+
+
+--INSERI DADOS EM PEDIDOS
+INSERT INTO pedidos (cliente_id, produto, quantidade) VALUES
+(1, 'Camisa', 2),
+(2, 'Calça', 1),
+(3, 'Tênis', 1),
+(1, 'Boné', 3);
+
+--CONSULTAS--
+
+SELECT clientes.nome, clientes.email, pedidos.produto, pedidos.quantidade
+FROM clientes
+INNER JOIN pedidos ON clientes.cliente_id = pedidos.cliente_id;
+
+SELECT clientes.nome, pedidos.produto, pedidos.quantidade
+FROM clientes
+INNER JOIN pedidos ON clientes.cliente_id = pedidos.cliente_id
+WHERE pedidos.produto = 'Camisa' AND pedidos.quantidade > 1;
