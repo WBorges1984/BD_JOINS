@@ -1,0 +1,45 @@
+
+
+--CRIA O BANCO
+CREATE DATABASE loja_online;
+
+--CRIA CLIENTES
+CREATE TABLE clientes (
+    cliente_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome VARCHAR(100),
+    email VARCHAR(100)
+);
+
+--CRIA PEDIDOS
+CREATE TABLE pedidos (
+    pedido_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    cliente_id INT,
+    produto VARCHAR(100),
+    quantidade INT,
+    FOREIGN KEY (cliente_id) REFERENCES clientes(cliente_id)
+);
+
+--CRIA UM LOG DE PEDIDOS
+CREATE TABLE log_pedidos (
+    log_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    pedido_id INT,
+    data_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (pedido_id) REFERENCES pedidos(pedido_id)
+);
+
+
+C--CRIA O TRIGGER
+CREATE TRIGGER registro_pedido
+AFTER INSERT
+ON pedidos
+FOR EACH ROW
+BEGIN
+    INSERT INTO log_pedidos (pedido_id, data_registro)
+    VALUES (NEW.pedido_id, datetime('now'));
+END
+
+--INSERE OS DADOS
+INSERT INTO pedidos (cliente_id, produto, quantidade) VALUES (1, 'Camisa', 2);
+
+--VERIFICA RESULTADO
+SELECT * FROM log_pedidos;
